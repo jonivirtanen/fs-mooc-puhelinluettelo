@@ -29,6 +29,7 @@ let persons = [
         "id": 5
       }
 ]
+
 app.use(bodyParser.json())
 
 app.get('/api/persons', (req, res) => {
@@ -57,7 +58,7 @@ app.post('/api/persons', (req, res) => {
     const person = req.body
     person.id = Math.floor(Math.random() * Math.floor(1000))
 
-    persons.concat(person)
+    persons = persons.concat(person)
     res.json(person)
 })
 
