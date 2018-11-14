@@ -35,7 +35,7 @@ let persons = [
         "id": 5
       }
 ]
-
+app.use(express.static('build'))
 app.use(bodyParser.json())
 app.use(cors())
 
