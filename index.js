@@ -3,7 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
-const person = require('./models/person')
+const Person = require('./models/person')
 
 morgan.token('json', function(req, res) {
     return JSON.stringify(req.body)
@@ -24,24 +24,19 @@ app.use(cors())
 app.use(morgan(':method :url :json :status :res[content-length] - :response-time ms'))
 
 app.get('/api/persons', (req, res) => {
-    person
+    Person
       .find ({})
       .then(persons => {
-          res.json(persons)
+          res.json(persons.map(formatPerson))
       })
 })
 
-app.get('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-
-    const person = persons.find(p => p.id === id)
-
-    if (person) {
+app.get('/api/persons/:id', (req, res) => {    
+    Person
+      .findById(req.params.id)
+      .then(person => {
         res.json(person)
-    }
-    else {
-        res.status(404).end()
-    }
+      })
 })
 
 app.get('/info', (req, res) => {
