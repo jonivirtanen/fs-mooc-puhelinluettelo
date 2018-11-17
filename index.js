@@ -9,14 +9,6 @@ morgan.token('json', function(req, res) {
     return JSON.stringify(req.body)
 })
 
-const formatPerson = (person) => {
-    return {
-        id: person._id,
-        name: person.name,
-        number: person.number
-    }
-}
-
 app.use(express.static('build'))
 app.use(bodyParser.json())
 app.use(cors())
@@ -27,7 +19,7 @@ app.get('/api/persons', (req, res) => {
     Person
       .find ({})
       .then(persons => {
-          res.json(persons.map(formatPerson))
+          res.json(persons.map(Person.format))
       })
 })
 
