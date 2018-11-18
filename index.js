@@ -27,14 +27,19 @@ app.get('/api/persons/:id', (req, res) => {
     Person
       .findById(req.params.id)
       .then(person => {
-        res.json(person)
+        res.json(Person.format(person))
       })
 })
 
 app.get('/info', (req, res) => {
-    const data = '<p> puhelinluettolossa on ' + persons.length + ' henkilön tiedot</p>' +
-                 '<p>' + new Date().toString() + '</p>'
-    res.send(data)
+    Person
+      .countDocuments({})
+      .then(count => {
+        const data = '<p> puhelinluettolossa on ' + count + ' henkilön tiedot</p>' +
+        '<p>' + new Date().toString() + '</p>'
+
+        res.send(data)
+      })
 })
 
 app.post('/api/persons', (req, res) => {
@@ -51,13 +56,15 @@ app.post('/api/persons', (req, res) => {
     const person = new Person({...body})
     
     person
-      .save(function(err) {
-          if (err) { console.log(err) }
+      .save()
+      .then(insertedPerson => {
+          res.json(insertedPerson)
       })
 })
 
 app.put('/api/persons/:id', (req, res) => {
     person = {...req.body}
+    console.log("person", person)
     Person
       .findOneAndUpdate({_id: req.params.id}, person, {new: true})
       .then(updatedPerson => {
