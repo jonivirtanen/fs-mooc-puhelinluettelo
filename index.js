@@ -50,10 +50,22 @@ app.post('/api/persons', (req, res) => {
 
     const person = new Person({...body})
     
-    console.log(person)
     person
       .save(function(err) {
-          if (err) console.log(err)
+          if (err) { console.log(err) }
+      })
+})
+
+app.put('/api/persons/:id', (req, res) => {
+    person = {...req.body}
+    Person
+      .findOneAndUpdate({_id: req.params.id}, person, {new: true})
+      .then(updatedPerson => {
+          res.json(updatedPerson)
+      })
+      .catch(err => {
+          console.log(err)
+          res.status(400).send({error: 'no such id'})
       })
 })
 
