@@ -48,15 +48,13 @@ app.post('/api/persons', (req, res) => {
         return res.status(400).json({"error": 'number must be defined'})
     }
 
-    if (persons.find(p => p.name === body.name) !== undefined) {
-        return res.status(400).json({"error": 'name must be unique'})
-    }
-
-    const person = body
-    person.id = Math.floor(Math.random() * Math.floor(1000))
-
-    persons = persons.concat(person)
-    res.json(person)
+    const person = new Person({...body})
+    
+    console.log(person)
+    person
+      .save(function(err) {
+          if (err) console.log(err)
+      })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
