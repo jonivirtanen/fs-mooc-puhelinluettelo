@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
-const url = 'mongodb://mongoadmin:SDqqh4D5G3hJfTbX@ds123796.mlab.com:23796/fs-mooc-puhelinluettelo'
+if ( process.env.NODE_ENV !== 'production' ) {
+    require('dotenv').config()
+}
+
+const url = process.env.MONGODB_URI
 
 mongoose.connect(url)
 
