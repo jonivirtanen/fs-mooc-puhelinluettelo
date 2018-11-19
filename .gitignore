@@ -1,5 +1,5 @@
 .env
-
+.eslintrc.js
 node_modules/
 
 mongo.js
