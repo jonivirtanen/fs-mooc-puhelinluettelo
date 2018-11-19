@@ -53,18 +53,29 @@ app.post('/api/persons', (req, res) => {
         return res.status(400).json({"error": 'number must be defined'})
     }
 
-    const person = new Person({...body})
-    
-    person
-      .save()
-      .then(insertedPerson => {
-          res.json(insertedPerson)
+    Person
+      .find({name: body.name})
+      .then(result => {
+          if (result.length === 0) {
+              return new Person({...body})
+          }
+          throw "Contact already exists";
+      })
+      .then(person => {
+          console.log("person", person)
+          person
+            .save()
+            .then(inserted => {
+                res.json(inserted)
+            })
+        })
+      .catch(err => {
+        res.status(403).json({error: err})
       })
 })
 
 app.put('/api/persons/:id', (req, res) => {
     person = {...req.body}
-    console.log("person", person)
     Person
       .findOneAndUpdate({_id: req.params.id}, person, {new: true})
       .then(updatedPerson => {
